@@ -15,20 +15,21 @@ from docx.enum.section import WD_ORIENT
 from docx.shared import Pt
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY") # API Key da OpenAI
 
+# Função principal para gerar o plano de teste
 def gerar_casos():
-    tarefa = entry_tarefa.get("1.0", tk.END)  # Mantém todas as formatações
+    tarefa = entry_tarefa.get("1.0", tk.END)
     contexto = entry_contexto.get()
     diretorio = entry_diretorio.get()
 
     if not tarefa or not diretorio:
         messagebox.showerror("Erro", "Preencha todos os campos obrigatórios.")
         return
-
+    
     progress_bar.start()
 
-    def worker():
+    def gerador():
         try:
             prompt = f"""
             Você é um Tester, Especialista em Quality Assurance e precisa criar um plano de teste para a tarefa: '{tarefa}'. '{contexto}'.
@@ -56,9 +57,9 @@ def gerar_casos():
             """
 
             response = openai.chat.completions.create(
-                model="gpt-4.1",
+                model="gpt-4.1", # Versão do modelo da OpenAI // Ajustar para mais recente se necessário
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.1
+                temperature=0.1 # Temperatura // baixa para respostas mais objetivas e alta para mais criativas
             )
 
             conteudo = response.choices[0].message.content
@@ -139,7 +140,7 @@ def gerar_casos():
         finally:
             progress_bar.stop()
 
-    Thread(target=worker).start()
+    Thread(target=gerador).start()
 
 def selecionar_diretorio():
     pasta = filedialog.askdirectory(initialdir=os.path.expanduser("~/Downloads"))
@@ -147,7 +148,7 @@ def selecionar_diretorio():
         entry_diretorio.delete(0, tk.END)
         entry_diretorio.insert(0, pasta)
 
-# GUI
+# Interface Gráfica
 app = tk.Tk()
 app.title("Gerador de Plano de Teste por IA")
 app.geometry("700x500")
