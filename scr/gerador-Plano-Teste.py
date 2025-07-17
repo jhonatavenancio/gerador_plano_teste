@@ -52,8 +52,8 @@ def gerar_casos():
 
             Obs: "Caso de teste" deve ser retorntado no formato CT-00,
             "Passos" deve retonrar em BDD,
-            "Status" e "Observação do teste" deve ser preenchido com -
-            Apenas Isso, não precisa retornar mais nada.
+            "Status" e "Observação do teste" deve ser preenchido com -,
+            Apenas essas informações, não precisa retornar mais nada.
             """
 
             response = openai.chat.completions.create(
@@ -93,8 +93,8 @@ def gerar_casos():
             # Adicionando título em negrito e centralizado
             titulo = document.add_paragraph('PLANO DE TESTES')
             titulo.alignment = 1  # Centralizar
-            run = titulo.runs[0]
-            run.bold = True  # Colocar em negrito
+            # run = titulo.runs[0]
+            # run.bold = True  # Colocar em negrito
 
             table_info = document.add_table(rows=4, cols=2)
             table_info.style = 'Table Grid'
